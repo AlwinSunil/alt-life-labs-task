@@ -1,0 +1,14 @@
+# Ignore environment files
+*.env
+
+# Ignore gitignore files
+*.gitignore
+
+# Ignore bun.lock files
+bun.lock
+
+# Ignore SVG files
+*.svg
+
+# Ignore database files
+*.db 
