@@ -14,8 +14,6 @@ router.use(adminMiddleware);
 
 router.get("/", getMembers);
 router.get("/:id", getMember);
-
-// Admin-protected routes
 router.post("/", createMember);
 router.put("/:id", updateMember);
 router.delete("/:id", deleteMember);
