@@ -1,12 +1,13 @@
-FROM node:latest
+FROM node:alpine
 
 WORKDIR /usr/src/app
 
-# Install OpenSSL 1.1 and other required dependencies
+# Install OpenSSL 1.1 and other required dependencies using apk
 RUN apk add --no-cache openssl zlib
 
 # Verify OpenSSL version for compatibility
-RUN ln -sf /usr/lib/libcrypto.so.1.1 /usr/lib/libcrypto.so && ln -sf /usr/lib/libssl.so.1.1 /usr/lib/libssl.so
+RUN ln -sf /usr/lib/libcrypto.so.1.1 /usr/lib/libcrypto.so && \
+    ln -sf /usr/lib/libssl.so.1.1 /usr/lib/libssl.so
 
 # Copy package files and install dependencies
 COPY package*.json ./
