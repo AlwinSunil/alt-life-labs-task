@@ -38,6 +38,10 @@ jobs:
               echo "Docker is installed"
             fi
 
+            pwd
+
+            ls
+
             echo "Checking if alt-life-labs-task directory exists"
             if [ ! -d "/alt-life-labs-task" ]; then
               echo "Error: Directory /alt-life-labs-task not found! Exiting..."
@@ -77,9 +81,9 @@ jobs:
             fi
 
             echo "Building updated Docker images"
-            docker-compose build
+            sudo docker-compose build
 
             echo "Restarting Docker containers"
-            docker-compose up --detach --force-recreate
+            sudo docker-compose up --detach --force-recreate
 
             echo "Deployment complete"
