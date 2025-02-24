@@ -6,6 +6,7 @@
 - Live at https://altlabs.alwinsunil.in/
 - Hosted on `t2.micro` instance on AWS.
 - Dockerized the application and run using docker compose.
+- Implemented Github action to rebuild and auto deploy the appication on changes to the main branch in client and server.
 
 *Screenshots are added below in this README
 
