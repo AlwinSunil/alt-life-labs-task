@@ -64,12 +64,6 @@ jobs:
               echo "No changes in client/, skipping build."
             fi
 
-            echo "Checking for SSL certificate files"
-            if [ ! -f "/etc/letsencrypt/live/altlabs.alwinsunil.in/fullchain.pem" ] || [ ! -f "/etc/letsencrypt/live/altlabs.alwinsunil.in/privkey.pem" ]; then
-              echo "Error: SSL certificate files not found at /etc/letsencrypt/live/altlabs.alwinsunil.in. Exiting..."
-              exit 1
-            fi
-
             echo "Building updated Docker images"
             sudo docker-compose build
 
