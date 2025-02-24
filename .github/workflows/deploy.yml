@@ -50,6 +50,14 @@ jobs:
 
             cd ./alt-life-labs-task
 
+             echo "Loading environment variables from .env (if present)"
+            if [ -f ".env" ]; then
+              # Export all variables from the .env file
+              set -a
+              . ./.env
+              set +a
+            fi
+
             echo "Pulling latest changes"
             git pull origin main
 
@@ -64,13 +72,6 @@ jobs:
               echo "No changes in client/, skipping build."
             fi
 
-            echo "Loading environment variables from .env (if present)"
-            if [ -f ".env" ]; then
-              # Export all variables from the .env file
-              set -a
-              . ./.env
-              set +a
-            fi
 
             echo "Building updated Docker images with environment variables"
             sudo docker-compose build
