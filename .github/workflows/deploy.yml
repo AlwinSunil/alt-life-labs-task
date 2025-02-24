@@ -64,6 +64,8 @@ jobs:
               echo "No changes in client/, skipping build."
             fi
 
+            env
+            
             echo "Building updated Docker images"
             sudo docker-compose build
 
