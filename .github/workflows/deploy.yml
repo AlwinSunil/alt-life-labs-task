@@ -48,7 +48,7 @@ jobs:
               exit 1
             fi
 
-            cd /alt-life-labs-task
+            cd ./alt-life-labs-task
 
             echo "Pulling latest changes"
             git pull origin main
