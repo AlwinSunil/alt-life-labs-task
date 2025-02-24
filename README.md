@@ -2,6 +2,10 @@
 
 - Implemented CRUD operations for Member, Book, Issuance.
 - Built Dashboard for pending return with filter and Book, Member and Issuance page.
+- Implemented authentication using JWT.
+- Live at https://altlabs.alwinsunil.in/
+- Hosted on `t2.micro` instance on AWS.
+- Dockerized the application and run using docker compose.
 
 *Screenshots are added below in this README
 
