@@ -64,16 +64,6 @@ jobs:
               echo "No changes in client/, skipping build."
             fi
 
-            echo "Validating environment variables"
-            required_envs=("CLIENT_URL" "ACCESS_TOKEN_SECRET" "REFRESH_TOKEN_SECRET" "PORT" "VITE_API_URL")
-
-            for env_var in "${required_envs[@]}"; do
-              if [ -z "${!env_var}" ]; then
-                echo "Error: Environment variable $env_var is not set! Exiting..."
-                exit 1
-              fi
-            done
-
             echo "Checking for SSL certificate files"
             if [ ! -f "/etc/letsencrypt/live/altlabs.alwinsunil.in/fullchain.pem" ] || [ ! -f "/etc/letsencrypt/live/altlabs.alwinsunil.in/privkey.pem" ]; then
               echo "Error: SSL certificate files not found at /etc/letsencrypt/live/altlabs.alwinsunil.in. Exiting..."
