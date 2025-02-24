@@ -64,9 +64,15 @@ jobs:
               echo "No changes in client/, skipping build."
             fi
 
-            env
-            
-            echo "Building updated Docker images"
+            echo "Loading environment variables from .env (if present)"
+            if [ -f ".env" ]; then
+              # Export all variables from the .env file
+              set -a
+              . ./.env
+              set +a
+            fi
+
+            echo "Building updated Docker images with environment variables"
             sudo docker-compose build
 
             echo "Restarting Docker containers"
