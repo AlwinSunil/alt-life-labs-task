@@ -43,8 +43,8 @@ jobs:
             ls
 
             echo "Checking if alt-life-labs-task directory exists"
-            if [ ! -d "/alt-life-labs-task" ]; then
-              echo "Error: Directory /alt-life-labs-task not found! Exiting..."
+            if [ ! -d "./alt-life-labs-task" ]; then
+              echo "Error: Directory ./alt-life-labs-task not found! Exiting..."
               exit 1
             fi
 

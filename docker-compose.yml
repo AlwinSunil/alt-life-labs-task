@@ -15,7 +15,7 @@ services:
       CLIENT_URL: "${CLIENT_URL}"
       ACCESS_TOKEN_SECRET: "${ACCESS_TOKEN_SECRET}"
       REFRESH_TOKEN_SECRET: "${REFRESH_TOKEN_SECRET}"
-      PORT: "${PORT}"
+      PORT: "3000"
 
   nginx:
     image: nginx:latest

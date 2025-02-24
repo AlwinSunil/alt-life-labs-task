@@ -50,7 +50,9 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
-const PORT = process.env.PORT;
+// Use a default port if process.env.PORT is not set or is an empty string.
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
