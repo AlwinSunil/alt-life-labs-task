@@ -8,7 +8,7 @@ const requestLogger = (req, res, next) => {
     const timeTakenMs = (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2);
 
     logger.info(
-      `${req.method} ${req.url} - ${res.statusCode} - ${timeTakenMs} ms`
+      `${req.method} ${req.originalUrl} - ${res.statusCode} - ${timeTakenMs} ms`
     );
   });
 
