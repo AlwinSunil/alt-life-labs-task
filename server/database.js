@@ -1,4 +1,6 @@
-import { Pool } from "pg";
+import pkg from "pg";
+const { Pool } = pkg;
+
 import bcrypt from "bcrypt";
 
 import errorHandler from "./middleware/errorHandler.js";
