@@ -38,10 +38,6 @@ jobs:
               echo "Docker is installed"
             fi
 
-            pwd
-
-            ls
-
             echo "Checking if alt-life-labs-task directory exists"
             if [ ! -d "./alt-life-labs-task" ]; then
               echo "Error: Directory ./alt-life-labs-task not found! Exiting..."
@@ -51,6 +47,7 @@ jobs:
             cd ./alt-life-labs-task
 
             # Set environment variables from GitHub secrets
+            export VITE_API_URL="${{ secrets.VITE_API_URL }}"s
             export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
             export REFRESH_TOKEN_SECRET="${{ secrets.REFRESH_TOKEN_SECRET }}"
             export PORT="${{ secrets.PORT }}"
@@ -59,7 +56,7 @@ jobs:
             git pull origin main
 
             echo "Building updated Docker images with environment variables"
-            sudo docker-compose build
+            sudo docker-compose build 
 
             echo "Restarting Docker containers"
             sudo docker-compose up --detach --force-recreate

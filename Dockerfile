@@ -20,8 +20,8 @@ FROM node:alpine
 WORKDIR /usr/src/app
 
 # Install OpenSSL 1.1 and other required dependencies
-RUN apk add --no-cache openssl zlib &&
-    ln -sf /usr/lib/libcrypto.so.1.1 /usr/lib/libcrypto.so &&
+RUN apk add --no-cache openssl zlib && \
+    ln -sf /usr/lib/libcrypto.so.1.1 /usr/lib/libcrypto.so && \
     ln -sf /usr/lib/libssl.so.1.1 /usr/lib/libssl.so
 
 # Copy server package files and install production dependencies
@@ -33,6 +33,8 @@ COPY ./server .
 
 # Copy the built React client from the builder stage into a folder (e.g., "public")
 COPY --from=client-builder /usr/src/app/client/dist ./dist
+
+ENV VITE_API_URL=${VITE_API_URL}
 
 # Expose the application port
 EXPOSE 3000
