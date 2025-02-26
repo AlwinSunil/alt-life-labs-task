@@ -1,27 +1,35 @@
 # Alt Life Labs
 
+### Round 1
+
 - Implemented CRUD operations for Member, Book, Issuance.
 - Built Dashboard for pending return with filter and Book, Member and Issuance page.
 - Implemented authentication using JWT.
 - Live at https://altlabs.alwinsunil.in/
+
+### Round 2
+
 - Hosted on `t2.micro` instance on AWS.
 - Dockerized the application and run using docker compose.
 - Implemented Github action to rebuild and auto deploy the appication on changes to the main branch in client and server.
 - Migrated the application to PostgreSQL from SQLite.
 
-*Screenshots are added below in this README
+\*Screenshots are added below in this README
 
 ## Tech Stack
 
 `./client`
--   React JS with Tailwind CSS and Vite JS
+
+- React JS with Tailwind CSS and Vite JS
 
 <br>
 
 `./server`
--   Node JS
--   Express JS
--   SQLite
+
+- Node JS
+- Express JS
+- PostgreSQL
+- Docker
 
 ## Screenshots
 
@@ -38,4 +46,3 @@
 ![Screenshot 2025-02-24 003456](https://github.com/user-attachments/assets/d2f7c366-489a-4552-901b-6a48b9fb4910)
 
 ![Screenshot 2025-02-24 002921](https://github.com/user-attachments/assets/9f6dbd40-22f2-41c3-b93b-3a57a934dd7d)
-
