@@ -30,25 +30,23 @@ const register = async (req, res, next) => {
     const { email, password } = req.body;
     const db = req.app.locals.db;
     // Check if the user already exists
-    const existingUser = await db.get(
-      "SELECT * FROM users WHERE email = ?",
-      email
+    const existingUser = await db.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
     );
-    if (existingUser) {
+    if (existingUser.rows.length > 0) {
       return res.status(400).json({ message: "User already exists" });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     // Insert new user with default role 'admin'
-    const result = await db.run(
-      "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-      email,
-      hashedPassword,
-      "admin"
+    const result = await db.query(
+      "INSERT INTO users (email, password, role) VALUES ($1, $2, $3) RETURNING id",
+      [email, hashedPassword, "admin"]
     );
     const newUser = {
-      id: result.lastID,
+      id: result.rows[0].id,
       email,
       password: hashedPassword,
       role: "admin",
@@ -81,20 +79,22 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const db = req.app.locals.db;
     // Find user by email from the database
-    const user = await db.get("SELECT * FROM users WHERE email = ?", email);
-    if (!user) {
+    const user = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+    if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.rows[0].password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // Generate tokens
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken(user.rows[0]);
+    const refreshToken = generateRefreshToken(user.rows[0]);
 
     // Set tokens in cookies
     res.cookie("accessToken", accessToken, {
@@ -136,13 +136,19 @@ const auth = async (req, res, next) => {
     }
 
     const db = req.app.locals.db;
-    const user = await db.get("SELECT * FROM users WHERE id = ?", decoded.id);
-    if (!user) {
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [
+      decoded.id,
+    ]);
+    if (user.rows.length === 0) {
       return res
         .status(404)
         .json({ authenticated: false, message: "User not found" });
     }
-    const userInfo = { id: user.id, email: user.email, role: user.role };
+    const userInfo = {
+      id: user.rows[0].id,
+      email: user.rows[0].email,
+      role: user.rows[0].role,
+    };
     return res.json({ authenticated: true, user: userInfo });
   } catch (err) {
     console.error("Auth check error:", err);
@@ -179,11 +185,13 @@ const token = async (req, res, next) => {
     }
 
     const db = req.app.locals.db;
-    const user = await db.get("SELECT * FROM users WHERE id = ?", decoded.id);
-    if (!user) {
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [
+      decoded.id,
+    ]);
+    if (user.rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-    const newAccessToken = generateAccessToken(user);
+    const newAccessToken = generateAccessToken(user.rows[0]);
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

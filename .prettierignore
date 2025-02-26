@@ -1,14 +1,9 @@
-# Ignore environment files
 *.env
-
-# Ignore gitignore files
+*.example
 *.gitignore
-
-# Ignore bun.lock files
 bun.lock
-
-# Ignore SVG files
 *.svg
-
-# Ignore database files
 *.db 
+node_modules
+dist
+*.log
