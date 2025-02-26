@@ -16,7 +16,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check for changes in server or client directories
+        id: check_changes
+        run: |
+          git fetch origin main
+          if [ -z "$(git diff --name-only origin/main -- server client)" ]; then
+            echo "No changes in server or client directories. Skipping build."
+            echo "::set-output name=build::false"
+          else
+            echo "Changes detected in server or client directories. Proceeding with build."
+            echo "::set-output name=build::true"
+          fi
+
       - name: Deploy to EC2 using SSH
+        if: steps.check_changes.outputs.build == 'true'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -50,32 +63,14 @@ jobs:
 
             cd ./alt-life-labs-task
 
-            echo "Loading environment variables from .env (if present)"
-            if [ -f ".env" ]; then
-              # Export all variables from the .env file
-              set -a
-              . ./.env
-              set +a
-            fi
-
             # Set environment variables from GitHub secrets
             export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
             export REFRESH_TOKEN_SECRET="${{ secrets.REFRESH_TOKEN_SECRET }}"
+            export VITE_API_URL="${{ secrets.VITE_API_URL }}"
             export PORT="${{ secrets.PORT }}"
 
             echo "Pulling latest changes"
             git pull origin main
-
-            # Check if client/ folder has changed
-            if git diff --name-only HEAD~1 HEAD | grep -q '^client/'; then
-              echo "Changes detected in client/, running build..."
-              cd client
-              npm install 
-              npm run build
-              cd ..
-            else
-              echo "No changes in client/, skipping build."
-            fi
 
             echo "Building updated Docker images with environment variables"
             sudo docker-compose build

@@ -13,9 +13,12 @@ RUN ln -sf /usr/lib/libcrypto.so.1.1 /usr/lib/libcrypto.so && \
 COPY package*.json ./
 RUN npm install --omit=dev
 
-# Copy the rest of the application code
-COPY . .
+RUN cd ../client && npm install --omit=dev
 
+RUN cd ../client && npm run build
+
+# Copy the built frontend files to the server's static directory
+RUN mkdir -p /usr/src/app/dist && cp -r ../client/dist/* /usr/src/app/dist/
 
 # Expose the application port
 EXPOSE 3000

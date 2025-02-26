@@ -38,7 +38,7 @@ app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "Hello World" });
 });
 
-const clientBuildPath = path.join(__dirname, "..", "client", "dist");
+const clientBuildPath = path.join(__dirname, "dist");
 app.use(express.static(clientBuildPath));
 
 app.get("*", (req, res) => {
