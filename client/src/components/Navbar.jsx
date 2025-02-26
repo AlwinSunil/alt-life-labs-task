@@ -8,7 +8,7 @@ function Navbar() {
 
   return (
     <div className="px-6 py-2 flex items-center border-gray-200 border-b">
-      <h1 className="font-bold text-2xl mt-0.5">Alt Labs Library</h1>
+      <h1 className="font-bold text-2xl mt-0.5">Alt Life Library</h1>
 
       {user && (
         <div className="flex ml-10 items-center text-sm font-medium gap-6">
