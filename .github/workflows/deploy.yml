@@ -16,18 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check for changes in server or client directories
-        id: check_changes
-        run: |
-          git fetch origin main
-          if [ -z "$(git diff --name-only origin/main -- server client)" ]; then
-            echo "No changes in server or client directories. Skipping build."
-            echo "::set-output name=build::false"
-          else
-            echo "Changes detected in server or client directories. Proceeding with build."
-            echo "::set-output name=build::true"
-          fi
-
       - name: Deploy to EC2 using SSH
         if: steps.check_changes.outputs.build == 'true'
         uses: appleboy/ssh-action@master
