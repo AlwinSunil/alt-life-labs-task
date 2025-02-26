@@ -50,13 +50,18 @@ jobs:
 
             cd ./alt-life-labs-task
 
-             echo "Loading environment variables from .env (if present)"
+            echo "Loading environment variables from .env (if present)"
             if [ -f ".env" ]; then
               # Export all variables from the .env file
               set -a
               . ./.env
               set +a
             fi
+
+            # Set environment variables from GitHub secrets
+            export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
+            export REFRESH_TOKEN_SECRET="${{ secrets.REFRESH_TOKEN_SECRET }}"
+            export PORT="${{ secrets.PORT }}"
 
             echo "Pulling latest changes"
             git pull origin main
@@ -71,7 +76,6 @@ jobs:
             else
               echo "No changes in client/, skipping build."
             fi
-
 
             echo "Building updated Docker images with environment variables"
             sudo docker-compose build
