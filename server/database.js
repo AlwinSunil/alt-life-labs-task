@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
 
-import errorHandler from "./middleware/errorHandler";
+import errorHandler from "./middleware/errorHandler.js";
 
 const pool = new Pool({
   user: process.env.POSTGRES_USER,
