@@ -47,7 +47,7 @@ jobs:
             cd ./alt-life-labs-task
 
             # Set environment variables from GitHub secrets
-            export VITE_API_URL="${{ secrets.VITE_API_URL }}"s
+            export VITE_API_URL="${{ secrets.VITE_API_URL }}"
             export ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}"
             export REFRESH_TOKEN_SECRET="${{ secrets.REFRESH_TOKEN_SECRET }}"
             export PORT="${{ secrets.PORT }}"
