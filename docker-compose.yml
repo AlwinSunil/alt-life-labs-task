@@ -1,13 +1,12 @@
 services:
   server:
     build:
-      context: ./server
+      context: .
       dockerfile: Dockerfile
     container_name: server
     ports:
       - "3000:3000"
     volumes:
-      - ./client/dist:/usr/src/client/dist
       - ./server/logs:/usr/src/app/logs
     networks:
       - app-network
