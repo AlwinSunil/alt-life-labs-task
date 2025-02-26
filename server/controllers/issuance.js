@@ -1,16 +1,16 @@
 // Get all issuances
-export const getIssuances = async (req, res) => {
+export const getIssuances = async (req, res, next) => {
   const db = req.app.locals.db;
   try {
     const issuances = await db.all("SELECT * FROM issuances");
     res.status(200).json(issuances);
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve issuances." });
+    next(error);
   }
 };
 
 // Get a single issuance by ID
-export const getIssuance = async (req, res) => {
+export const getIssuance = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   try {
@@ -21,12 +21,12 @@ export const getIssuance = async (req, res) => {
       res.status(404).json({ error: "Issuance not found." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve issuance." });
+    next(error);
   }
 };
 
 // Create a new issuance
-export const createIssuance = async (req, res) => {
+export const createIssuance = async (req, res, next) => {
   const db = req.app.locals.db;
   const { book_id, member_id, issued_date, return_date } = req.body;
 
@@ -53,12 +53,12 @@ export const createIssuance = async (req, res) => {
       return_date: return_date || null,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to create issuance." });
+    next(error);
   }
 };
 
 // Update an existing issuance
-export const updateIssuance = async (req, res) => {
+export const updateIssuance = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   const { book_id, member_id, issued_date, return_date } = req.body;
@@ -91,12 +91,12 @@ export const updateIssuance = async (req, res) => {
       return_date: updatedReturnDate,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to update issuance." });
+    next(error);
   }
 };
 
 // Delete an issuance
-export const deleteIssuance = async (req, res) => {
+export const deleteIssuance = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   try {
@@ -111,12 +111,12 @@ export const deleteIssuance = async (req, res) => {
       res.status(404).json({ error: "Issuance not found." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete issuance." });
+    next(error);
   }
 };
 
 // Toggle issuance status: issued <=> returned
-export const toggleIssuance = async (req, res) => {
+export const toggleIssuance = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   try {
@@ -131,6 +131,6 @@ export const toggleIssuance = async (req, res) => {
 
     res.status(200).json({ ...issuance, status: newStatus });
   } catch (error) {
-    res.status(500).json({ error: "Failed to toggle issuance." });
+    next(error);
   }
 };

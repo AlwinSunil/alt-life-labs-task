@@ -1,4 +1,4 @@
-export async function getBooks(req, res) {
+export async function getBooks(req, res, next) {
   try {
     const db = req.app.locals.db;
     // Explicitly selecting columns including id
@@ -8,11 +8,11 @@ export async function getBooks(req, res) {
     res.json(books);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 }
 
-export async function getBook(req, res) {
+export async function getBook(req, res, next) {
   try {
     const { id } = req.params;
     const db = req.app.locals.db;
@@ -27,11 +27,11 @@ export async function getBook(req, res) {
     res.json(book);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 }
 
-export async function createBook(req, res) {
+export async function createBook(req, res, next) {
   try {
     // Expecting the frontend to post these fields
     const { name, publisher, launch_date, category_id } = req.body;
@@ -57,11 +57,11 @@ export async function createBook(req, res) {
     res.status(201).json(newBook);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 }
 
-export async function updateBook(req, res) {
+export async function updateBook(req, res, next) {
   try {
     const { id } = req.params;
     const { name, publisher, launch_date, category_id } = req.body;
@@ -96,11 +96,11 @@ export async function updateBook(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 }
 
-export async function deleteBook(req, res) {
+export async function deleteBook(req, res, next) {
   try {
     const { id } = req.params;
     const db = req.app.locals.db;
@@ -112,6 +112,6 @@ export async function deleteBook(req, res) {
     res.json({ message: "Book deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 }

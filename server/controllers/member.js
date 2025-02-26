@@ -1,16 +1,16 @@
 // Get all members
-export const getMembers = async (req, res) => {
+export const getMembers = async (req, res, next) => {
   const db = req.app.locals.db;
   try {
     const members = await db.all("SELECT id, name, phone, email FROM members");
     res.status(200).json(members);
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve members." });
+    next(error);
   }
 };
 
 // Get a single member by ID
-export const getMember = async (req, res) => {
+export const getMember = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   try {
@@ -24,12 +24,12 @@ export const getMember = async (req, res) => {
       res.status(404).json({ error: "Member not found." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve member." });
+    next(error);
   }
 };
 
 // Create a new member
-export const createMember = async (req, res) => {
+export const createMember = async (req, res, next) => {
   const db = req.app.locals.db;
   const { name, phone, email } = req.body;
   try {
@@ -41,12 +41,12 @@ export const createMember = async (req, res) => {
     );
     res.status(201).json({ id: result.lastID, name, phone, email });
   } catch (error) {
-    res.status(500).json({ error: "Failed to create member." });
+    next(error);
   }
 };
 
 // Update an existing member
-export const updateMember = async (req, res) => {
+export const updateMember = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   const { name, phone, email } = req.body;
@@ -64,12 +64,12 @@ export const updateMember = async (req, res) => {
       res.status(404).json({ error: "Member not found." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to update member." });
+    next(error);
   }
 };
 
 // Delete a member
-export const deleteMember = async (req, res) => {
+export const deleteMember = async (req, res, next) => {
   const db = req.app.locals.db;
   const { id } = req.params;
   try {
@@ -80,6 +80,6 @@ export const deleteMember = async (req, res) => {
       res.status(404).json({ error: "Member not found." });
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete member." });
+    next(error);
   }
 };

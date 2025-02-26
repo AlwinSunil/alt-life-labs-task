@@ -1,38 +1,33 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+import "dotenv/config";
 import path from "path";
 import { fileURLToPath } from "url";
-import "dotenv/config";
+
+import cookieParser from "cookie-parser";
+import express from "express";
 
 import { initializeDatabase } from "./database.js";
-import { logger } from "./middleware/logger.js";
 import authRoutes from "./routes/auth.js";
-import memberRoutes from "./routes/member.js";
 import bookRoutes from "./routes/book.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import issuanceRoutes from "./routes/issuance.js";
+import memberRoutes from "./routes/member.js";
+import errorHandler from "./middleware/errorHandler.js";
+import logger from "./logger.js";
+import requestLogger from "./middleware/requestLogger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
-
 app.use(express.json());
 app.use(cookieParser());
-app.use(logger);
+
+app.use(requestLogger);
 
 const db = await initializeDatabase();
 app.locals.db = db;
 
-// Mount all API routes under /api
 app.use("/api/auth", authRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/book", bookRoutes);
@@ -50,9 +45,19 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
-// Use a default port if process.env.PORT is not set or is an empty string.
+app.use(errorHandler);
+
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+process.on("uncaughtException", (error) => {
+  logger.error(`Uncaught Exception: ${error.message}`, { stack: error.stack });
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  logger.error("Unhandled Rejection at:", { promise, reason });
 });

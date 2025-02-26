@@ -25,7 +25,7 @@ const generateRefreshToken = (user) => {
 };
 
 // POST /auth/register
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const db = req.app.locals.db;
@@ -40,7 +40,7 @@ const register = async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Insert new user with default role 'member'
+    // Insert new user with default role 'admin'
     const result = await db.run(
       "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
       email,
@@ -71,12 +71,12 @@ const register = async (req, res) => {
     return res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     console.error("Registration error:", err);
-    return res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 };
 
 // POST /auth/login
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const db = req.app.locals.db;
@@ -109,12 +109,12 @@ const login = async (req, res) => {
     return res.json({ message: "Logged in successfully" });
   } catch (err) {
     console.error("Login error:", err);
-    return res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 };
 
 // GET /auth - Check authentication status
-const auth = async (req, res) => {
+const auth = async (req, res, next) => {
   try {
     // Extract token from cookies or Authorization header
     const token =
@@ -146,26 +146,24 @@ const auth = async (req, res) => {
     return res.json({ authenticated: true, user: userInfo });
   } catch (err) {
     console.error("Auth check error:", err);
-    return res
-      .status(500)
-      .json({ authenticated: false, message: "Internal server error" });
+    next(err);
   }
 };
 
 // POST /auth/logout
-const logout = (req, res) => {
+const logout = (req, res, next) => {
   try {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     return res.json({ message: "Logged out successfully" });
   } catch (err) {
     console.error("Logout error:", err);
-    return res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 };
 
 // POST /token - Refresh access token
-const token = async (req, res) => {
+const token = async (req, res, next) => {
   try {
     // Get refresh token from cookies
     const refreshToken = req.cookies && req.cookies.refreshToken;
@@ -193,7 +191,7 @@ const token = async (req, res) => {
     return res.json({ message: "Access token refreshed" });
   } catch (err) {
     console.error("Token refresh error:", err);
-    return res.status(500).json({ message: "Internal server error" });
+    next(err);
   }
 };
 
